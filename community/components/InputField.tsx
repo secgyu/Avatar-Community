@@ -1,18 +1,29 @@
 import { colors } from "@/constants";
-import { ForwardedRef, forwardRef } from "react";
+import { ForwardedRef, forwardRef, ReactNode } from "react";
 import { StyleSheet, Text, TextInput, TextInputProps, View } from "react-native";
 
 interface InputFieldProps extends TextInputProps {
   label?: string;
   variant?: "filled" | "standard" | "outlined";
   error?: string;
+  rightChild?: ReactNode;
 }
 
-function InputField({ label, variant = "filled", error, ...props }: InputFieldProps, ref?: ForwardedRef<TextInput>) {
+function InputField(
+  { label, variant = "filled", rightChild = null, error, ...props }: InputFieldProps,
+  ref?: ForwardedRef<TextInput>
+) {
   return (
     <View>
       {label && <Text style={styles.label}>{label}</Text>}
-      <View style={[styles.container, styles[variant], Boolean(error) && styles.inputError]}>
+      <View
+        style={[
+          styles.container,
+          styles[variant],
+          props.multiline && styles.multiLine,
+          Boolean(error) && styles.inputError,
+        ]}
+      >
         <TextInput
           ref={ref}
           placeholderTextColor={colors.GRAY_500}
@@ -22,6 +33,7 @@ function InputField({ label, variant = "filled", error, ...props }: InputFieldPr
           spellCheck={false}
           autoCorrect={false}
         />
+        {rightChild}
       </View>
       {Boolean(error) && <Text style={styles.error}>{error}</Text>}
     </View>
@@ -59,6 +71,11 @@ const styles = StyleSheet.create({
   },
   inputError: {
     backgroundColor: colors.RED_100,
+  },
+  multiLine: {
+    alignItems: "flex-start",
+    paddingVertical: 10,
+    height: 200,
   },
 });
 
