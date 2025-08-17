@@ -10,11 +10,13 @@ import { useEffect } from "react";
 import CustomButton from "@/components/CustomButton";
 import useGetPost from "@/hooks/queries/useGetPost";
 import useUpdatePost from "@/hooks/queries/useUpdatePost";
+import VoteAttached from "@/components/VoteAttached";
 
 type FormValues = {
   title: string;
   description: string;
   imageUris: ImageUri[];
+  isVoteAttached: boolean;
 };
 
 export default function PostUpdateScreen() {
@@ -27,6 +29,7 @@ export default function PostUpdateScreen() {
     defaultValues: {
       title: post?.title,
       description: post?.description,
+      isVoteAttached: post?.hasVote,
       imageUris: post?.imageUris,
     },
   });
@@ -55,6 +58,7 @@ export default function PostUpdateScreen() {
       <KeyboardAwareScrollView style={styles.container}>
         <TitleInput />
         <DescriptionInput />
+        <VoteAttached />
       </KeyboardAwareScrollView>
     </FormProvider>
   );

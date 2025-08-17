@@ -1,4 +1,4 @@
-import { CreatePostDto, Post } from "@/types";
+import { CreatePostDto, CreateVoteDto, Post, VoteOption } from "@/types";
 import axiosInstance from "./axios";
 
 type RequestUpdatePost = {
@@ -26,11 +26,19 @@ async function getPost(id: number): Promise<Post> {
   return data;
 }
 
-
-
 async function updatePost({ id, body }: RequestUpdatePost): Promise<number> {
   const { data } = await axiosInstance.patch(`/posts/${id}`, body)
   return data;
 }
 
-export { createPost, getPosts, deletePost, getPost, updatePost };
+async function createVote({ postId, voteOptionId }: CreateVoteDto): Promise<{ postId: number; voteOptionId: VoteOption }> {
+  const { data } = await axiosInstance.post(`/posts/${postId}/vote/${voteOptionId}`)
+  return data
+}
+
+async function likePost(id: number): Promise<number> {
+  const { data } = await axiosInstance.post(`/likes/${id}`)
+  return data
+}
+
+export { createPost, getPosts, deletePost, getPost, updatePost, createVote, likePost };
