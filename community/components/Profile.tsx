@@ -1,26 +1,33 @@
 import { colors } from "@/constants";
-import { ReactNode } from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import React, { ReactNode } from "react";
+import { Image, Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko";
-
+import { baseUrls } from "@/api/axios";
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
 
 interface ProfileProps {
   onPress: () => void;
-  imageUri?: string;
   nickname: string;
+  imageUri?: string;
   createdAt: string;
   option?: ReactNode;
 }
+
 function Profile({ onPress, imageUri, nickname, createdAt, option }: ProfileProps) {
   return (
     <View style={styles.container}>
       <Pressable style={styles.profileContainer} onPress={onPress}>
         <Image
-          source={imageUri ? { uri: imageUri } : require("@/assets/images/default-avatar.png")}
+          source={
+            imageUri
+              ? {
+                  uri: `${Platform.OS === "ios" ? baseUrls.ios : baseUrls.android}/${imageUri}`,
+                }
+              : require("@/assets/images/default-avatar.png")
+          }
           style={styles.avatar}
         />
         <View style={{ gap: 4 }}>
